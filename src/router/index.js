@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import TodoScreen from "@/feature/TodoScreen/TodoScreen.vue";
 import LoginScreen from "@/feature/LoginScreen/LoginScreen.vue";
@@ -9,7 +9,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 })
 
