@@ -86,19 +86,17 @@ export default {
     },
 
     handleSearchTodo() {
-       if (this.selected === "all") {
+      if (this.selected === "all") {
         this.filterTodo = this.todos.filter((item) =>
           item.name.includes(this.search)
         );
       } else if (this.selected === "completed") {
         this.filterTodo = this.todos.filter(
-          (item) =>
-            item.status === "completed"
+          (item) => item.status === "completed"
         );
       } else if (this.selected === "uncompleted") {
         this.filterTodo = this.todos.filter(
-          (item) =>
-            item.status === "not complete"
+          (item) => item.status === "not complete"
         );
       }
       this.filterTodo = this.filterTodo.filter((item) =>
@@ -184,7 +182,13 @@ export default {
             :class="{ completed: todo.status == 'completed' }"
             :key="todo.id"
           >
-            <li class="todo-item"><input v-model="todo.name" /></li>
+            <li class="todo-item">
+              <span v-if="todo.status == 'completed'">{{ todo.name }}</span
+              ><input
+                v-if="todo.status == 'not complete'"
+                v-model="todo.name"
+              />
+            </li>
             <button class="check-btn" @click="handleCompleteTodo(todo)">
               Complete</button
             ><button class="trash-btn" @click="handleDeleteTodo(todo)">

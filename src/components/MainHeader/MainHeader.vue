@@ -47,6 +47,7 @@ export default {
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
   border-radius: 20px;
+  font-weight: bold;
 }
 
 .main-header .navigate button:focus {
