@@ -1,4 +1,5 @@
 <script>
+import { mapState, mapActions } from "vuex";
 import { IS_LOGIN } from "@/helper/constants.js";
 import MainHeader from "@/components/MainHeader/MainHeader.vue";
 
@@ -13,30 +14,6 @@ export default {
         name: "",
         description: "",
       },
-
-      todos: [
-        {
-          id: 1,
-          name: "Do homework",
-          status: "not complete",
-        },
-        {
-          id: 2,
-          name: "Learning English",
-          status: "not complete",
-        },
-        {
-          id: 3,
-          name: "Go out",
-          status: "completed",
-        },
-        {
-          id: 4,
-          name: "Present project",
-          status: "not complete",
-        },
-      ],
-
       selected: "all",
       filterTodo: {},
       show: "true",
@@ -44,7 +21,15 @@ export default {
     };
   },
 
+  computed: mapState({
+    todos: (state) => state.todosModule.todos,
+  }),
+
   methods: {
+    ...mapActions({
+      onGetTodos: "todosModule/getTodos",
+    }),
+
     clearInputs() {
       this.inputs = {
         name: "",
@@ -105,29 +90,37 @@ export default {
     },
   },
 
-  mounted() {
-    this.filterTodo = this.todos;
+  async created() {
     let isLogin = localStorage.getItem("isLogin");
     if (isLogin != IS_LOGIN) this.$router.push({ path: "/login" });
+    await this.onGetTodos();
+    this.filterTodo = this.todos;
   },
 
   watch: {
-    selected() {
-      if (this.selected === "all") {
-        this.filterTodo = this.todos.filter((item) =>
-          item.name.includes(this.search)
-        );
-      } else if (this.selected === "completed") {
-        this.filterTodo = this.todos.filter(
-          (item) =>
-            item.status === "completed" && item.name.includes(this.search)
-        );
-      } else if (this.selected === "uncompleted") {
-        this.filterTodo = this.todos.filter(
-          (item) =>
-            item.status === "not complete" && item.name.includes(this.search)
-        );
-      }
+    selected: {
+      handler() {
+        if (this.selected === "all") {
+          this.filterTodo = this.todos.filter((item) =>
+            item.name.includes(this.search)
+          );
+        } else if (this.selected === "completed") {
+          this.filterTodo = this.todos.filter(
+            (item) =>
+              item.status === "completed" && item.name.includes(this.search)
+          );
+        } else if (this.selected === "uncompleted") {
+          this.filterTodo = this.todos.filter(
+            (item) =>
+              item.status === "not complete" && item.name.includes(this.search)
+          );
+        }
+      },
+      deep: true,
+    },
+
+    todos: {
+      deep: true,
     },
   },
 };
